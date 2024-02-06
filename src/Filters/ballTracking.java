@@ -33,7 +33,6 @@ public class ballTracking implements PixelFilter, Interactive {
                 red[points.get(i).getRow()][points.get(i).getColumn()] = 0;
                 green[points.get(i).getRow()][points.get(i).getColumn()] = 0;
                 blue[points.get(i).getRow()][points.get(i).getColumn()] = 0;
-                System.out.println("set to black: " + points.get(i).getRow() + " " + points.get(i).getColumn());
             } else {
                 red[points.get(i).getRow()][points.get(i).getColumn()] = 255;
                 green[points.get(i).getRow()][points.get(i).getColumn()] = 255;
