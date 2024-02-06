@@ -21,14 +21,14 @@ public class Kgrouping implements PixelFilter {
 
         for (int r = 0; r < red.length; r++) {
             for (int c = 0; c < red[0].length; c++) {
-                allPoints.add(new Point(red[r][c], green[r][c], blue[r][c]));
+                allPoints.add(new Point(red[r][c], green[r][c], blue[r][c], r, c));
             }
         }
 
         ArrayList<Cluster> clusters = new ArrayList<>();
 
         for (int i = 0; i < amt; i++) {
-            Cluster p = new Cluster(new Point((int) (Math.random() * 256), (int) (Math.random() * 256),(int)(Math.random() * 256)));
+            Cluster p = new Cluster(new Point((int) (Math.random() * 256), (int) (Math.random() * 256),(int)(Math.random() * 256), 0, 0));
             p.assignPoints(allPoints,p);
             clusters.add(p);
         }
