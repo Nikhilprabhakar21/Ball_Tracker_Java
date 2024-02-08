@@ -1,12 +1,11 @@
 package core;
 public class Point {
-    private int r;
-    private int g;
-    private int b;
+    private double r;
+    private double g;
+    private double b;
     private int row;
     private int column;
-    private int heightval;
-    private int Hue;
+    private double Hue;
     private double saturation;
     private int xPos;
     private int yPos;
@@ -17,25 +16,25 @@ public class Point {
         this.row = posx;
         this.column = posy;
 
-        this.Hue = (int) calcHue(this.r, this.g, this.b);
-        this.saturation = 0;
+        this.Hue = calcHue(this.r, this.g, this.b, "H");
+        this.saturation = calcHue(this.r,this.g,this.b,"S");
     }
 
-    public int getX() {
+    public double getX() {
         return r;
     }
 
-    public int getY() {
+    public double getY() {
         return g;
     }
 
-    public int getZ() {
+    public double getZ() {
         return b;
     }
     public int getRow(){return row;}
     public int getColumn(){return column;}
 
-    public int getHue() {
+    public double getHue() {
         return Hue;
     }
 
@@ -51,9 +50,6 @@ public class Point {
         this.column = column;
     }
 
-    public void setHeightval(int heightval) {
-        this.heightval = heightval;
-    }
 
     public void setX(int x) {
         this.r = x;
@@ -77,22 +73,52 @@ public class Point {
         this.saturation = amtChange;
     }
 
-    public double calcHue(int red, int green, int blue){
-        double red1 = (double) red /255;
-        double blue1 = (double) blue /255;
-        double green1 = (double) green /255;
-        double returnhue = 0;
-        if (red1 > blue1 && red1 > green1 /*red is max*/){
-            returnhue = (green1 - blue1)/(red1 - Math.min(green1, blue1));
-        } if (green > red && green1 > blue){
-            returnhue = 2 + (blue1 - red1)/(green1 - Math.min(blue1, red1));
-        } if (blue > red && blue1 > green){
-            returnhue = 4 + (red1 - green1)/(green1 - Math.min(red1, green1));
+    public double calcHue(double r, double g, double b, String type) {
+        // R, G, B values are divided by 255
+        // to change the range from 0..255 to 0..1
+        r = r / 255.0;
+        g = g / 255.0;
+        b = b / 255.0;
+
+        // h, s, v = hue, saturation, value
+        double cmax = Math.max(r, Math.max(g, b)); // maximum of r, g, b
+        double cmin = Math.min(r, Math.min(g, b)); // minimum of r, g, b
+        double diff = cmax - cmin; // diff of cmax and cmin.
+        double h = -1, s = -1;
+
+        // if cmax and cmax are equal then h = 0
+        if (cmax == cmin)
+            h = 0;
+
+            // if cmax equal r then compute h
+        else if (cmax == r)
+            h = (60 * ((g - b) / diff) + 360) % 360;
+
+            // if cmax equal g then compute h
+        else if (cmax == g)
+            h = (60 * ((b - r) / diff) + 120) % 360;
+
+            // if cmax equal b then compute h
+        else if (cmax == b)
+            h = (60 * ((r - g) / diff) + 240) % 360;
+
+        // if cmax equal zero
+        if (cmax == 0)
+            s = 0;
+        else
+            s = (diff / cmax) * 100;
+
+        // compute v
+        double v = cmax * 100;
+
+        if (type.equals("H")) {
+            return h;
+        } else if (type.equals("S")) {
+            return s;
+
+        } else {
+            return 0;
         }
 
-        if (returnhue < 0){
-            returnhue += 360;
-        }
-        return returnhue*60;
     }
 }

@@ -29,7 +29,7 @@ public class ballTracking implements PixelFilter, Interactive {
         }
 
         for (int i = 0; i < points.size(); i++) {
-            if (points.get(i).getHue() == p.getHue()){
+            if (points.get(i).getHue() == p.getHue() && points.get(i).getSaturation() == p.getSaturation()){
                 red[points.get(i).getRow()][points.get(i).getColumn()] = 0;
                 green[points.get(i).getRow()][points.get(i).getColumn()] = 0;
                 blue[points.get(i).getRow()][points.get(i).getColumn()] = 0;
