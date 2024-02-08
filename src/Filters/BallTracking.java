@@ -1,4 +1,5 @@
-package Filters;
+/*package Filters;
+
 
 import Interfaces.Interactive;
 import Interfaces.PixelFilter;
@@ -90,19 +91,19 @@ public class BallTracking implements PixelFilter, Interactive {
         return new float[]{(float) h, (float) s, (float) v}; // Placeholder
     }
 }
-
-/*package Filters;
+*/
+package Filters;
 
 import Interfaces.Interactive;
 import Interfaces.PixelFilter;
 import core.DImage;
 import core.Point;
 
-public class BallTrackingRGB implements PixelFilter, Interactive {
+public class BallTracking implements PixelFilter, Interactive {
     private Point targetPoint;
     private int sensitivity = 10;
 
-    public BallTrackingRGB() {
+    public BallTracking() {
         targetPoint = new Point(0, 0, 0, 0, 0);
     }
 
@@ -127,9 +128,9 @@ public class BallTrackingRGB implements PixelFilter, Interactive {
     }
 
     private boolean isColorWithinRange(int r, int g, int b) {
-        int redDiff = Math.abs(r - targetPoint.getRed());
-        int greenDiff = Math.abs(g - targetPoint.getGreen());
-        int blueDiff = Math.abs(b - targetPoint.getBlue());
+        int redDiff = (int) Math.abs(r - targetPoint.getX());
+        int greenDiff = (int) Math.abs(g - targetPoint.getY());
+        int blueDiff = (int) Math.abs(b - targetPoint.getZ());
         return redDiff <= sensitivity && greenDiff <= sensitivity && blueDiff <= sensitivity;
     }
 
@@ -145,4 +146,3 @@ public class BallTrackingRGB implements PixelFilter, Interactive {
         if (key == '-') sensitivity -= 5;
     }
 }
-*/
