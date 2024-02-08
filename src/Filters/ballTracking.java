@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 public class ballTracking implements PixelFilter, Interactive {
     Point p;
+    int s = 10;
 
     public ballTracking() {
         p = new Point(0,0,0,0,0);
@@ -27,9 +28,11 @@ public class ballTracking implements PixelFilter, Interactive {
                 points.add(new Point(red[r][c], blue[r][c], green[r][c], r, c));
             }
         }
+        int t = 50;
+
 
         for (int i = 0; i < points.size(); i++) {
-            if (points.get(i).getHue() == p.getHue() && points.get(i).getSaturation() == p.getSaturation()){
+            if (points.get(i).getHue() <= p.getHue() + s && points.get(i).getHue() >= p.getHue() - s){
                 red[points.get(i).getRow()][points.get(i).getColumn()] = 0;
                 green[points.get(i).getRow()][points.get(i).getColumn()] = 0;
                 blue[points.get(i).getRow()][points.get(i).getColumn()] = 0;
@@ -52,6 +55,7 @@ public class ballTracking implements PixelFilter, Interactive {
         p = new Point(red[mouseY][mouseX], green[mouseY][mouseX], blue[mouseY][mouseX], mouseY, mouseX);
     }
     public void keyPressed(char key){
-
+        if (key == '+') s += 5;
+        if (key == '-') s -= 5;
     }
 }

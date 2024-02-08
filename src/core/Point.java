@@ -10,8 +10,8 @@ public class Point {
     private int xPos;
     private int yPos;
     public Point(int s, int p, int b, int posx, int posy){
-        this.r = p;
-        this.g = s;
+        this.r = s;
+        this.g = p;
         this.b = b;
         this.row = posx;
         this.column = posy;
