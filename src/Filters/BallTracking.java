@@ -32,7 +32,6 @@ public class BallTracking implements PixelFilter, Interactive {
                 }
             }
         }
-
         img.setColorChannels(red, green, blue);
         return img;
     }
