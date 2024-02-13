@@ -7,9 +7,8 @@ public class Point {
     private int column;
     private double Hue;
     private double saturation;
-    private int xPos;
-    private int yPos;
-    public Point(int s, int p, int b, int posx, int posy){
+
+    public Point(int s, int p, int b, int posy, int posx){
         this.r = s;
         this.g = p;
         this.b = b;
