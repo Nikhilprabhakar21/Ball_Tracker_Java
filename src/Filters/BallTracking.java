@@ -3,16 +3,16 @@ package Filters;
 import Interfaces.Interactive;
 import Interfaces.PixelFilter;
 import core.DImage;
-import core.Point;
+import core.*;
 
 import java.util.ArrayList;
 
 public class BallTracking implements PixelFilter, Interactive {
-    private Point targetPoint;
+    private ArrayList<Point> targetColors;
     private int sensitivity = 10;
 
     public BallTracking() {
-        targetPoint = new Point(0, 0, 0, 0, 0);
+        targetColors = new ArrayList<>();
     }
 
     @Override
@@ -21,11 +21,11 @@ public class BallTracking implements PixelFilter, Interactive {
         short[][] green = img.getGreenChannel();
         short[][] blue = img.getBlueChannel();
 
-        ArrayList<Point> maskedColors = new ArrayList<>();
+        ArrayList<Point> maskedPixels = new ArrayList<>();
 
-        doMask(red, green, blue, maskedColors);
-        Point middle = calcMidP(maskedColors);
-        makeSquare(middle.getRow(), middle.getColumn(), red, green, blue, 5);
+        doMask(red, green, blue, maskedPixels, targetColors);
+//        Point middle = calcMidP(maskedPixels);
+//        makeSquare(middle.getRow(), middle.getColumn(), red, green, blue, 5);
 
         img.setColorChannels(red, green, blue);
         return img;
@@ -51,13 +51,13 @@ public class BallTracking implements PixelFilter, Interactive {
         }
     }
 
-    private void doMask(short[][] red, short[][] green, short[][] blue, ArrayList<Point> maskedColors) {
+    private void doMask(short[][] red, short[][] green, short[][] blue, ArrayList<Point> maskedPixels, ArrayList<Point> targetColors) {
         for (int r = 0; r < red.length; r++) {
             for (int c = 0; c < red[0].length; c++) {
-                if (isColorWithinRange(red[r][c], green[r][c], blue[r][c])) {
+                if (isColorWithinRange(red[r][c], green[r][c], blue[r][c], targetColors)) {
                     red[r][c] = green[r][c] = blue[r][c] = 0; // Mark matching pixels
                     Point P = new Point(red[r][c], green[r][c], blue[r][c], c, r);
-                    maskedColors.add(P);
+                    maskedPixels.add(P);
                 } else {
                     red[r][c] = green[r][c] = blue[r][c] = 255; // Non-matching pixels
                 }
@@ -84,22 +84,39 @@ public class BallTracking implements PixelFilter, Interactive {
         return P;
     }
 
-    private boolean isColorWithinRange(int r, int g, int b) {
-        int redDiff = (int) Math.abs(r - targetPoint.getX());
-        int greenDiff = (int) Math.abs(g - targetPoint.getY());
-        int blueDiff = (int) Math.abs(b - targetPoint.getZ());
-        return redDiff <= sensitivity && greenDiff <= sensitivity && blueDiff <= sensitivity;
+    private boolean isColorWithinRange(int r, int g, int b, ArrayList<Point> targetColors) {
+        if (targetColors.size() > 0){
+            for (int i = 0; i < targetColors.size(); i++) {
+                int redDiff = (int) Math.abs(r - targetColors.get(i).getX());
+                int greenDiff = (int) Math.abs(g - targetColors.get(i).getY());
+                int blueDiff = (int) Math.abs(b - targetColors.get(i).getZ());
+                return redDiff <= sensitivity && greenDiff <= sensitivity && blueDiff <= sensitivity;
+            }
+            int redDiff = (int) Math.abs(r - targetColors.get(0).getX());
+            int greenDiff = (int) Math.abs(g - targetColors.get(0).getY());
+            int blueDiff = (int) Math.abs(b - targetColors.get(0).getZ());
+            return redDiff <= sensitivity && greenDiff <= sensitivity && blueDiff <= sensitivity;
+        } else {
+            Point targetPoint = new Point(0,0,0,0,0);
+            int redDiff = (int) Math.abs(r - targetPoint.getX());
+            int greenDiff = (int) Math.abs(g - targetPoint.getY());
+            int blueDiff = (int) Math.abs(b - targetPoint.getZ());
+            return redDiff <= sensitivity && greenDiff <= sensitivity && blueDiff <= sensitivity;
+        }
+
     }
 
     public void mouseClicked(int mouseX, int mouseY, DImage img) {
         short[][] red = img.getRedChannel();
         short[][] green = img.getGreenChannel();
         short[][] blue = img.getBlueChannel();
-        targetPoint = new Point(red[mouseY][mouseX], green[mouseY][mouseX], blue[mouseY][mouseX], mouseY, mouseX);
+        targetColors.add(new Point(red[mouseY][mouseX], green[mouseY][mouseX], blue[mouseY][mouseX], mouseY, mouseX));
     }
 
     public void keyPressed(char key) {
         if (key == '+') sensitivity += 5;
         if (key == '-') sensitivity -= 5;
+        if (key == 'r') targetColors.remove(targetColors.size()-1);
+
     }
 }
