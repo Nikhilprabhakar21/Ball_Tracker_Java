@@ -30,7 +30,7 @@ public class BallTrackingRGB implements PixelFilter, Interactive {
         doMask(red, green, blue, maskedColors);
         Point middle = calcMidP(maskedColors);
         makeSquare(middle.getRow(), middle.getColumn(), red, green, blue, 5);
-        bringImageBack(red, green, blue, red1, green1, blue1);
+        //bringImageBack(red, green, blue, red1, green1, blue1);
 
         img.setColorChannels(red, green, blue);
         return img;
@@ -65,11 +65,11 @@ public class BallTrackingRGB implements PixelFilter, Interactive {
         for (int r = 0; r < red.length; r++) {
             for (int c = 0; c < red[0].length; c++) {
                 if (isColorWithinRange(red[r][c], green[r][c], blue[r][c])) {
-                    red[r][c] = green[r][c] = blue[r][c] = 0; // Mark matching pixels
+                    //red[r][c] = green[r][c] = blue[r][c] = 0; // Mark matching pixels
                     Point P = new Point(red[r][c], green[r][c], blue[r][c], c, r);
                     maskedColors.add(P);
                 } else {
-                    red[r][c] = green[r][c] = blue[r][c] = 255; // Non-matching pixels
+                    //red[r][c] = green[r][c] = blue[r][c] = 255; // Non-matching pixels
                 }
             }
         }
