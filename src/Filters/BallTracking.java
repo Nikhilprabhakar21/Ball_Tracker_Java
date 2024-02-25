@@ -102,5 +102,9 @@ public class BallTracking implements PixelFilter, Interactive {
     public void keyPressed(char key) {
         if (key == '+') sensitivity += 5;
         if (key == '-') sensitivity -= 5;
+        if (key == 'r') {
+            targetPoints.remove(targetPoints.size()-1);
+            maskedPointList.remove(maskedPointList.size()-1);
+        }
     }
 }
