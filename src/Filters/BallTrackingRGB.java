@@ -49,15 +49,8 @@ public class BallTrackingRGB implements PixelFilter, Interactive {
     }
 
     public void makeSquare(int r, int c, short[][] red, short[][] green, short[][] blue, int size){
-        for (int i = -1; i < 1; i++) {
-            for (int j = -1; j < 1; j++) {
-                red[r + i][c + j] = 255;
-                green[r + i][c + j] = 30;
-                blue[r + i][c + j] = 205;
-            }
-        }
 
-        if (r - size > size && r + size < red.length && c - size > 0 && c + size < red[0].length) {
+        if (r - size > 0 && r + size < red.length && c - size > 0 && c + size < red[0].length) {
             for (int i = -size; i < size; i++) {
                 for (int j = -size; j < size; j++) {
                     red[r + i][c + j] = 255;
