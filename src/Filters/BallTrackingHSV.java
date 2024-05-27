@@ -34,15 +34,8 @@ public class BallTrackingHSV implements PixelFilter, Interactive {
         return img;
     }
 
+    // called on the midpoint of the masked area
     public void makeSquare(int r, int c, short[][] red, short[][] green, short[][] blue, int size){
-        for (int i = -1; i < 1; i++) {
-            for (int j = -1; j < 1; j++) {
-                red[r + i][c + j] = 255;
-                green[r + i][c + j] = 30;
-                blue[r + i][c + j] = 255;
-            }
-        }
-
         if (r - size > size && r + size < red.length && c - size > 0 && c + size < red[0].length) {
             for (int i = -size; i < size; i++) {
                 for (int j = -size; j < size; j++) {
@@ -55,6 +48,11 @@ public class BallTrackingHSV implements PixelFilter, Interactive {
     }
 
     private void doMask(short[][] red, short[][] green, short[][] blue, ArrayList<Point> maskedColors) {
+        // Compares the HSV values of all pixels in the image against the clicked targetPoint. Add pixels that are
+        // close to maskedColors and mark them as black. Mark all other pixels as white.
+
+        // red, green, blue -> RGB channels of the entire image
+        // targetPoint -> set to point where mouse clicked
         float[] targetHSV = rgbToHsv((int)targetPoint.getX(), (int)targetPoint.getY(), (int)targetPoint.getZ());
 
         for (int r = 0; r < red.length; r++) {
@@ -72,6 +70,7 @@ public class BallTrackingHSV implements PixelFilter, Interactive {
     }
 
     private Point calcMidP(ArrayList<Point> maskedColors) {
+        // Return a white point at the center of the masked area.
         int row = 0;
         int col = 0;
         for (int i = 0; i < maskedColors.size(); i++) {
